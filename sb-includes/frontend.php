@@ -333,16 +333,21 @@ function sb_page_title($title) {
 }
 
 //Downloads external webpage. Used to add Bible passages to sermon page.
+// Mod by cflee (2017-11-19): Fixes for ESV v3 API, as v2 API was deprecated in Nov 2017
 function sb_download_page ($page_url) {
 	if (function_exists('curl_init')) {
 		$curl = curl_init();
 		curl_setopt ($curl, CURLOPT_URL, $page_url);
 		curl_setopt ($curl, CURLOPT_TIMEOUT, 2);
 		curl_setopt ($curl, CURLOPT_RETURNTRANSFER, 1);
-		curl_setopt ($curl, CURLOPT_HTTPHEADER, array('Accept-Charset: utf-8;q=0.7,*;q=0.7'));
+// Added API key from api.esv.org
+		curl_setopt ($curl, CURLOPT_HTTPHEADER, array('Accept-Charset: utf-8;q=0.7,*;q=0.7', 'Authorization: Token INSERT_ESV_API_KEY_HERE'));
 		$contents = curl_exec ($curl);
 		$content_type = curl_getinfo( $curl, CURLINFO_CONTENT_TYPE );
 		curl_close ($curl);
+
+		$json = json_decode($contents, true);
+		$contents = $json["passages"][0];
 	}
 	else
 		{
@@ -414,11 +419,13 @@ function sb_add_bible_text ($start, $end, $version) {
 }
 
 //Returns ESV text
+// Mod by cflee (2017-11-19): Fixes for ESV v3 API, as v2 API was deprecated in Nov 2017
 function sb_add_esv_text ($start, $end) {
 	// If you are experiencing errors, you should sign up for an ESV API key,
 	// and insert the name of your key in place of the letters IP in the URL
 	// below (.e.g. ...passageQuery?key=YOURAPIKEY&passage=...)
-	$esv_url = 'http://www.esvapi.org/v2/rest/passageQuery?key=IP&passage='.rawurlencode(sb_tidy_reference ($start, $end)).'&include-headings=false&include-footnotes=false';
+	//$esv_url = 'http://www.esvapi.org/v2/rest/passageQuery?key=IP&passage='.rawurlencode(sb_tidy_reference ($start, $end)).'&include-headings=false&include-footnotes=false';
+	$esv_url = 'https://api.esv.org/v3/passage/html/?q='.rawurlencode(sb_tidy_reference ($start, $end)).'&include-headings=false&include-footnotes=false';
 	return sb_download_page ($esv_url);
 }
 
@@ -1066,18 +1073,18 @@ function sb_print_filters($filter) {
 					        </fieldset>
 					        <p><?php _e('SORT BY:', $sermon_domain) ?>
 					            <select name="sortby" id="sortby">
-									<?php foreach ($sb as $k => $v): ?>
-									<option value="<?php echo $v ?>" <?php echo $csb == $v ? 'selected="selected"' : '' ?>><?php _e($k, $sermon_domain) ?></option>
-									<?php endforeach ?>
-								</select>
+					                <?php foreach ($sb as $k => $v): ?>
+					                <option value="<?php echo $v ?>" <?php echo $csb == $v ? 'selected="selected"' : '' ?>><?php _e($k, $sermon_domain) ?></option>
+					                <?php endforeach ?>
+					            </select>
 					        </p>
 
 					        <p><?php _e('ORDER:', $sermon_domain) ?>
 					           <select name="dir" id="dir">
-									<?php foreach ($di as $k => $v): ?>
-									<option value="<?php echo $v ?>" <?php echo $cd == $v ? 'selected="selected"' : '' ?>><?php _e($k, $sermon_domain) ?></option>
-									<?php endforeach ?>
-								</select>
+					              <?php foreach ($di as $k => $v): ?>
+					              <option value="<?php echo $v ?>" <?php echo $cd == $v ? 'selected="selected"' : '' ?>><?php _e($k, $sermon_domain) ?></option>
+					              <?php endforeach ?>
+					          </select>
 					            </select>
 					        </p>
 					        <input type="image" src="<?php bloginfo('template_directory'); ?>/images/submitbtn.jpg" class="submitbtn"  value="<?php _e('SUBMIT', $sermon_domain) ?>"/>
