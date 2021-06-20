@@ -89,7 +89,7 @@ function sb_widget_sermon($args, $widget_args=1) {
 			if (isset ($foo[0]) && isset($bar[0]))
 				echo " <span class=\"sermon-passage\">(".sb_get_books($foo[0], $bar[0], FALSE).")</span>";
 		}
-		if ($preacherz) {
+		if ($preacher) {
 			echo " <span class=\"sermon-preacher\">".__('by', $sermon_domain)." <a href=\"";
 			sb_print_preacher_link($sermon, false);
 			echo "\">".stripslashes($sermon->preacher)."</a></span>";
@@ -1024,74 +1024,47 @@ function sb_print_filters($filter) {
 		<div id="mainfilter">
 			<form method="post" id="sermon-filter" action="<?php echo sb_display_url(); ?>">
 				<div style="clear:both">
-					<table class="sermonbrowser">
-						<tr>
-							<td class="fieldname"><?php _e('Preacher', $sermon_domain) ?></td>
-							<td class="field"><select name="preacher" id="preacher">
-									<option value="0" <?php echo (isset($_REQUEST['preacher']) && $_REQUEST['preacher'] != 0) ? '' : 'selected="selected"' ?>><?php _e('[All]', $sermon_domain) ?></option>
-									<?php foreach ($preachers as $preacher): ?>
-									<option value="<?php echo $preacher->id ?>" <?php echo isset($_REQUEST['preacher']) && $_REQUEST['preacher'] == $preacher->id ? 'selected="selected"' : '' ?>><?php echo stripslashes($preacher->name).' ('.$preacher->count.')' ?></option>
-									<?php endforeach ?>
-								</select>
-							</td>
-							<td class="fieldname rightcolumn"><?php _e('Services', $sermon_domain) ?></td>
-							<td class="field"><select name="service" id="service">
-									<option value="0" <?php echo isset($_REQUEST['service']) && $_REQUEST['service'] != 0 ? '' : 'selected="selected"' ?>><?php _e('[All]', $sermon_domain) ?></option>
-									<?php foreach ($services as $service): ?>
-									<option value="<?php echo $service->id ?>" <?php echo isset($_REQUEST['service']) && $_REQUEST['service'] == $service->id ? 'selected="selected"' : '' ?>><?php echo stripslashes($service->name).' ('.$service->count.')' ?></option>
-									<?php endforeach ?>
-								</select>
-							</td>
-						</tr>
-						<tr>
-							<td class="fieldname"><?php _e('Book', $sermon_domain) ?></td>
-							<td class="field"><select name="book">
-									<option value=""><?php _e('[All]', $sermon_domain) ?></option>
-									<?php foreach ($book_count as $book): ?>
-									<option value="<?php echo $book->name ?>" <?php echo isset($_REQUEST['book']) && $_REQUEST['book'] == $book->name ? 'selected=selected' : '' ?>><?php echo $translated_books[stripslashes($book->name)]. ' ('.$book->count.')' ?></option>
-									<?php endforeach ?>
-								</select>
-							</td>
-							<td class="fieldname rightcolumn"><?php _e('Series', $sermon_domain) ?></td>
-							<td class="field"><select name="series" id="series">
-									<option value="0" <?php echo (isset($_REQUEST['series']) && $_REQUEST['series'] != 0) ? '' : 'selected="selected"' ?>><?php _e('[All]', $sermon_domain) ?></option>
-									<?php foreach ($series as $item): ?>
-									<option value="<?php echo $item->id ?>" <?php echo isset($_REQUEST['series']) && $_REQUEST['series'] == $item->id ? 'selected="selected"' : '' ?>><?php echo stripslashes($item->name).' ('.$item->count.')' ?></option>
-									<?php endforeach ?>
-								</select>
-							</td>
-						</tr>
-						<tr>
-							<td class="fieldname"><?php _e('Start date', $sermon_domain) ?></td>
-							<td class="field"><input type="text" name="date" id="date" value="<?php echo isset($_REQUEST['date']) ? mysql_real_escape_string($_REQUEST['date']) : '' ?>" /></td>
-							<td class="fieldname rightcolumn"><?php _e('End date', $sermon_domain) ?></td>
-							<td class="field"><input type="text" name="enddate" id="enddate" value="<?php echo isset($_REQUEST['enddate']) ? mysql_real_escape_string($_REQUEST['enddate']) : '' ?>" /></td>
-						</tr>
-						<tr>
-							<td class="fieldname"><?php _e('Keywords', $sermon_domain) ?></td>
-							<td class="field" colspan="3"><input style="width: 98.5%" type="text" id="title" name="title" value="<?php echo isset($_REQUEST['title']) ? mysql_real_escape_string($_REQUEST['title']) : '' ?>" /></td>
-						</tr>
-						<tr>
-							<td class="fieldname"><?php _e('Sort by', $sermon_domain) ?></td>
-							<td class="field"><select name="sortby" id="sortby">
+
+					<?php /* Modded: original table .sermonbrowser entirely removed */ ?>
+					<?php /* Ported from original by juvone/ripplewerkz */ ?>
+					<div class="sermons-left-wrapper">
+					    <div class="sermons-functions-wrapper">
+					        <div class="sermons-functions">
+					            <h8>WHAT CAN I DO HERE?</h8>
+					            <ul>
+					                <li><div class="sermons-online">Listen to Sermons online</div></li>
+					                <li><div class="sermons-mp3">Download audio in MP3</div></li>
+					                <li><div class="sermons-manuscript">Download manuscript</div></li>
+					            </ul>
+					        </div>
+					    </div>
+
+					    <div class="sermons-filter">
+					        <fieldset>
+					            <label><?php _e('KEYWORD:', $sermon_domain) ?></label>
+					                <input style="width: 98.5%" type="text" id="title" name="title" value="<?php echo esc_sql($_REQUEST['title']) ?>" />
+					        </fieldset>
+					        <p><?php _e('SORT BY:', $sermon_domain) ?>
+					            <select name="sortby" id="sortby">
 									<?php foreach ($sb as $k => $v): ?>
 									<option value="<?php echo $v ?>" <?php echo $csb == $v ? 'selected="selected"' : '' ?>><?php _e($k, $sermon_domain) ?></option>
 									<?php endforeach ?>
 								</select>
-							</td>
-							<td class="fieldname rightcolumn"><?php _e('Direction', $sermon_domain) ?></td>
-							<td class="field"><select name="dir" id="dir">
+					        </p>
+
+					        <p><?php _e('ORDER:', $sermon_domain) ?>
+					           <select name="dir" id="dir">
 									<?php foreach ($di as $k => $v): ?>
 									<option value="<?php echo $v ?>" <?php echo $cd == $v ? 'selected="selected"' : '' ?>><?php _e($k, $sermon_domain) ?></option>
 									<?php endforeach ?>
 								</select>
-							</td>
-						</tr>
-						<tr>
-							<td colspan="3">&nbsp;</td>
-							<td class="field"><input type="submit" class="filter" value="<?php _e('Filter &raquo;', $sermon_domain) ?>">			</td>
-						</tr>
-					</table>
+					            </select>
+					        </p>
+					        <input type="image" src="<?php bloginfo('template_directory'); ?>/images/submitbtn.jpg" class="submitbtn"  value="<?php _e('SUBMIT', $sermon_domain) ?>"/>
+					    </div>
+					</div> <!--end .sermons-left-wrapper-->
+					<?php /* End ported from original by juvone/ripplewerkz */ ?>
+
 					<input type="hidden" name="page" value="1">
 				</div>
 			</form>
