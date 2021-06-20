@@ -1,9 +1,9 @@
 === Sermon Browser ===
-Contributors: mark8barnes, bhengh
+Contributors: mark8barnes
 Donate link: http://www.sermonbrowser.com/donate/
 Tags: sermons, podcast, mp3, church, bible, audio, widget, embed, video, esv, wpmu, preach, iTunes, preacher, listen
-Requires at least: 2.9.2
-Tested up to: 3.8.1
+Requires at least: 3.6
+Tested up to: 4.9.8
 Stable tag: trunk
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl.html
@@ -18,7 +18,7 @@ The Sermon Browser Wordpress Plugin allows churches to simply upload sermons to 
 
 1. Store thousands of sermons, and **search** them by topic, preacher, bible passage or date.
 2. Full **podcasting** capabilities, including custom podcasts for individual users.
-3. Sermons uploaded in mp3 format can be **played directly** on your website using the WordPress 3.6 built-in player or your choice of WordPress MP3 plugins (including [MediaElement.js](https://wordpress.org/plugins/media-element-html5-video-and-audio-player/)).
+3. Sermons uploaded in mp3 format can be **played directly** on your website using the WordPress 3.6 built-in player or your choice of WordPress MP3 plugins.
 4. Three optional **sidebar widgets** can display sermons on all of your posts or pages.
 5. **Embed videos** and other flash files from sites such as [YouTube](http://www.youtube.com/) or [Vimeo](http://www.vimeo.com/), using either HTML code provided by those sites, or shortcode providing by a WordPress plugin.
 6. **Other file types** can also be uploaded, including PDF, Powerpoint, Word, text and RTF. Multiple files can be attached to single sermons.
@@ -27,11 +27,22 @@ The Sermon Browser Wordpress Plugin allows churches to simply upload sermons to 
 9. Details about each sermon can be **added automatically from the MP3's ID3 tags**.
 10. Powerful **templating function** allows complete customisation to complement the look of your site.
 11. Simple statistics show how often each sermon has been listened to.
-12. Support for both multisite (WordPress 3.0 and above) and [WordPress MU (WPMU)](http://mu.wordpress.org/) for earlier versions of WordPress.
+12. Support for multisite.
 13. Extensive **help** and [tutorial screencasts](http://www.sermonbrowser.com/tutorials/).
 14. Active [community support fourm](http://www.sermonbrowser.com/forum/).
-15. English, German, Portugese Brazilian, Romanian, Russian and Spanish translations included.
+15. Translated into Brazilian Portugese, German, Hindi, Italian, Romanian, Russian, Spanish, Ukrainian and Welsh.
 
+= Translations provided by =
+
+* Brazilian Portugese [DIJO](http://www.djio.com.br/sermonbrowser-em-portugues-brasileiro-pt_br/)
+* German - Monika Gause
+* Hindi - [Chanel](http://outshinesolutions.com/)
+* Italian - Manoah Cammarano
+* Romanian - [Lucian Mihailescu](http://lucianwebservice.com/)
+* Russian - [FatCow](http://www.fatcow.com/), [Vadym Gulyi](http://www.vady.kiev.ua/) and [Alisa Bagrii](http://www.everycloudtech.com/)
+* Spanish - Juan, and Marvin Ortega
+* Ukrainian - Alisa Bagrii from [Everycloudtech](http://www.everycloudtech.com/)
+* Welsh - Emyr James
 
 
 == Installation ==
@@ -53,8 +64,6 @@ The Sermon Browser Wordpress Plugin allows churches to simply upload sermons to 
 1. Download the plugin, and unzip it.
 2. Place the contents of the sermon-browser folder in your wp-content/mu-plugins folder and upload it to your website.
 3. The plugin will be automatically activated and available for each user.
-
-
 
 == Frequently Asked Questions ==
 
@@ -154,8 +163,6 @@ Yes.  There are additonal [FAQs on the Sermon Browser support forum](http://www.
 4. **The options page:** You can customise SermonBrowser through this option page. At the bottom of the screen are the settings that allow you to customise how MP3 ID3 tags will be imported.
 5. **Using the template facility:** The powerful templating facility means that with a little knowledge of HTML, CSS, and the Sermon Browser template tags, you can easily adapt Sermon Browser's output to suit your own requirements. SermonBrowser produces valid XHTML code, using semantically correct markup and is fully standards compliant.
 
-
-
 == Customisation ==
 
 Sermon Browser works out of the box, but if you wish, you can customise it to fit in with your own theme, and to display or hide whatever information you choose. If you want to create an extra page on your site that just shows a few sermons (for example, just the sermons preached at a recent conference), use **shortcodes**. If you want to customise how Sermon Browser appears throughout your site, use **template tags** (scroll down for more info), or the built-in CSS editor.
@@ -192,7 +199,7 @@ Sets the maximum number of sermons to be displayed.
 
 #### [sermons dir=asc|desc] ####
 Sets the sort order to ascending or descending.
-                                             
+
 ### Template Tags ###
 If you want to change the output of Sermon Browser, you'll need to edit the templates. You'll need to understand the basics of HTML and CSS, and to know the special SermonBrowser template tags. There are two templates, one (called the results page) is used to produce the search results on the main sermons page. The other template (called the sermon page) is used to produce the page for single sermon. Most tags can be used in both templates, but some are specific.
 #### Results Page Only ####
@@ -249,6 +256,36 @@ If you want to change the output of Sermon Browser, you'll need to edit the temp
 
 == Upgrade Notice ==
 
+= 0.45.22 =
+Fixed sermons not deleting, and podcasts not downloading on iOS.
+
+= 0.45.21 =
+Several security enhancements, and update to allow the the ESV Bible text to continue to be used.
+
+= 0.45.20 =
+Added nonces to enhance security protection.
+
+= 0.45.19 =
+Fixed bug that prevented iframe embeds from being saved.
+
+= 0.45.18 =
+Fixed bug that prevented shortcodes from working and adds Italian translation.
+
+= 0.45.17 =
+Minor, under-the-hood changes to translations.
+
+= 0.45.16 =
+Fixed potential XSS vulnerabilities.
+
+= 0.45.15 =
+Fixed bugs that prevented adding sermons from MP3 files.
+
+= 0.45.14 =
+Fixed bug introduced in 0.45.13 which prevented series being edited/saved.
+
+= 0.45.13 =
+Compatibility with PHP 5.2 to 5.6 and WordPress 3.6 to 4.3.
+
 = 0.45.12 =
 More bug fixes.
 
@@ -300,6 +337,55 @@ Important security fixes. All users should upgrade to this version.
 
 
 == Changelog ==
+
+= 0.45.22 (29 August 2018) =
+* **Bug fix:** Sermons couldn't be deleted. Now they can.
+* **Bug fix:** Sermons weren't downloading on Apple's Podcast app. Now they are.
+* See [changeset](https://plugins.trac.wordpress.org/changeset/1932341/sermon-browser/trunk)
+
+= 0.45.21 (11 August 2018) =
+* **Bug fix:** Several security improvements.
+* **Bug fix:** Support sites that have renamed the wp-content folder
+* **Enhancement:** Updated to v3 of the ESV Bible API (v2 was deprecated).
+* **Enhancement:** Removed support for flash audio players.
+* **Enhancement:** External https media files can now be downloaded
+* See [changeset](https://plugins.trac.wordpress.org/changeset?new=1927443%40sermon-browser%2Ftrunk&old=1686060%40sermon-browser%2Ftrunk)
+
+= 0.45.20 (27 June 2017) =
+* **Bug fix:** Added nonces to enhance security protection.
+* See [changeset](https://plugins.trac.wordpress.org/changeset/1686060/sermon-browser/trunk)
+
+= 0.45.19 (31 May 2016) =
+* **Bug fix:** Fixed bug introduced in 0.45.16 that prevented iframe embeds from being saved.
+* See [changeset](https://plugins.trac.wordpress.org/changeset/1427807/sermon-browser/trunk)
+
+= 0.45.18 (30 May 2016) =
+* **Bug fix:** Fixed bug that prevented shortcodes from working.
+* **Enhancement:** No need to surround embedded videos with the [embed] shortcode.
+* **Enhancement:** Added Italian translation (thanks to Manoah Cammarano)
+* See [changeset](https://plugins.trac.wordpress.org/changeset/1426889/sermon-browser/trunk)
+
+= 0.45.17 (23 May 2016) =
+* **Enhancement:** Minor, under-the-hood changes to translations.
+* See [changeset](https://plugins.trac.wordpress.org/changeset/1422176/sermon-browser/trunk)
+
+= 0.45.16 (21 April 2016) =
+* **Bug fix:** Fixed potential XSS vulnerabilities.
+* See [changeset](https://plugins.trac.wordpress.org/changeset/1413162/sermon-browser/trunk)
+
+= 0.45.15 (10 November 2015) =
+* **Bug fix:** Sermon duration is now correctly calculated.
+* **Bug fix:** Fixed bug that prevented sermons being added from the 'Files' page.
+* **Bug fix:** Remove empty rows from the list of files.
+* See [changeset](https://plugins.trac.wordpress.org/changeset/1283205/sermon-browser/trunk)
+
+= 0.45.14 (6 November 2015) =
+* **Bug fix:** Fixed bug introduced in 0.45.13 which prevented series being edited/saved.
+* See [changeset](https://plugins.trac.wordpress.org/changeset/1281420/sermon-browser/trunk)
+
+= 0.45.13 (6 November 2015) =
+* **Bug fix:** Compatibility with PHP 5.2 to 5.6 and WordPress 3.6 to 4.3.
+* See [changeset](https://plugins.trac.wordpress.org/changeset/1281163/sermon-browser)
 
 = 0.45.12 (16 September 2013) =
 * **Bug fix:** Removed call to deprecated wp_timezone_supported function if WordPress version is 3.2 or later.
