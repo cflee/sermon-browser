@@ -587,28 +587,37 @@ function sb_print_sermon_link($sermon, $echo = true, $relative_link = true) {
 }
 
 // Prints preacher search URL
+// Mod by cflee (2015-04-28): force URL to not include existing parameters
+//                            such that if you are already filtering by preacher
+//                            and you click on the series, you ONLY filter by
+//                            series (instead of old behaviour of preacher &
+//                            series)
 function sb_print_preacher_link($sermon, $relative_link = true) {
-	echo sb_build_url(array('preacher' => $sermon->pid), false, $relative_link);
+	echo sb_build_url(array('preacher' => $sermon->pid), true, $relative_link);
 }
 
 // Prints series search URL
+// Mod by cflee (2015-04-28): force URL to not include existing parameters
 function sb_print_series_link($sermon) {
-	echo sb_build_url(array('series' => $sermon->ssid), false, true);
+	echo sb_build_url(array('series' => $sermon->ssid), true, true);
 }
 
 // Prints service search URL
+// Mod by cflee (2015-04-28): force URL to not include existing parameters
 function sb_print_service_link($sermon) {
-	echo sb_build_url(array('service' => $sermon->sid), false, true);
+	echo sb_build_url(array('service' => $sermon->sid), true, true);
 }
 
 // Prints bible book search URL
+// Mod by cflee (2015-04-28): force URL to not include existing parameters
 function sb_get_book_link($book_name, $relative_link = true) {
-	return sb_build_url(array('book' => $book_name), false, $relative_link);
+	return sb_build_url(array('book' => $book_name), true, $relative_link);
 }
 
 // Prints tag search URL
+// Mod by cflee (2015-04-28): force URL to not include existing parameters
 function sb_get_tag_link($tag, $relative_link = true) {
-	return sb_build_url(array('stag' => $tag), false, $relative_link);
+	return sb_build_url(array('stag' => $tag), true, $relative_link);
 }
 
 // Prints tags
