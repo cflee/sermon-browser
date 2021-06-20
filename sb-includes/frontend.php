@@ -546,6 +546,17 @@ function sb_add_headers() {
 					if (is_array($sb_w) && in_array('sermon-browser-popular', $sb_w))
 						wp_enqueue_script('jquery');
 		}
+
+		// Mod by cflee: extensions to produce Open Graph tags if this is a single sermon
+		if (isset($_REQUEST['sermon_id'])) {
+		    echo "<meta property=\"og:type\" content=\"article\">";
+		    $result = sb_get_single_sermon($_REQUEST['sermon_id']);
+		    if ($result) {
+		        echo "<meta property=\"og:title\" content=\"".$result["Sermon"]->title." | Jubilee Church Singapore\">\n";
+		        echo "<meta property=\"og:url\" content=\"".sb_print_sermon_link($result["Sermon"],false)."\">\n";
+		        echo "<meta property=\"og:description\" content=\"Sermon on ".sb_formatted_date($result["Sermon"])." by ".$result["Sermon"]->preacher." at a ".$result["Sermon"]->service." service. (".sb_get_passages($result["Sermon"]).")\">\n";
+		    }
+		}
 	}
 }
 
@@ -1156,5 +1167,15 @@ function sb_display_mini_player ($sermon, $id=1, $flashvars="") {
 		echo " src=\"".SB_PLUGIN_URL."/sb-includes/1bit.swf\"";
 		echo " type=\"application/x-shockwave-flash\"/></span>";
 	}
+}
+// Mod by cflee (refreshed 2014-06-01): new function to return textual ref to all passages without link
+// -----Called by shortcode handler----- (not used anymore)
+// Called by custom Open Graph tag generator inserted to sb_add_headers() in this file
+function sb_get_passages($sermon) {
+    $ref_output = array();
+    for ($i = 0; $i < count($sermon->start); $i++) {
+        $ref_output[] = sb_tidy_reference($sermon->start[$i], $sermon->end[$i]);
+    }
+    return implode($ref_output, ", ");
 }
 ?>
