@@ -449,7 +449,7 @@ function sb_manage_preachers() {
 				@chmod(SB_ABSPATH.$sermonUploadDir.'images', 0777);
 			$dest = SB_ABSPATH.$sermonUploadDir.'images/'.$filename;
 			if (@move_uploaded_file($_FILES['upload']['tmp_name'], $dest))
-				$filename = $prefix.mysql_real_escape_string($filename);
+				$filename = $prefix.esc_sql($filename);
 			else {
 				$error = true;
 				echo '<div id="message" class="updated fade"><p><b>'.__('Could not save uploaded file. Please try again.', $sermon_domain).'</b></div>';
@@ -465,11 +465,11 @@ function sb_manage_preachers() {
 		} else {
 			$wpdb->query("UPDATE {$wpdb->prefix}sb_preachers SET name = '$name', description = '$description', image = '$filename' WHERE id = $pid");
 			if ($_POST['old'] != $filename)
-				@unlink(SB_ABSPATH.sb_get_option('upload_dir').'images/'.mysql_real_escape_string($_POST['old']));
+				@unlink(SB_ABSPATH.sb_get_option('upload_dir').'images/'.esc_sql($_POST['old']));
 		}
 		if(isset($_POST['remove'])){
 			$wpdb->query("UPDATE {$wpdb->prefix}sb_preachers SET name = '$name', description = '$description', image = '' WHERE id = $pid");
-			@unlink(SB_ABSPATH.sb_get_option('upload_dir').'images/'.mysql_real_escape_string($_POST['old']));
+			@unlink(SB_ABSPATH.sb_get_option('upload_dir').'images/'.esc_sql($_POST['old']));
 		}
 		if(!$error)
 			echo "<script>document.location = '".site_url()."/wp-admin/admin.php?page=sermon-browser/preachers.php&saved=true';</script>";
@@ -847,8 +847,8 @@ function sb_files() {
 			if ($file_allowed) {
 				$prefix = '';
 				$dest = SB_ABSPATH.sb_get_option('upload_dir').$prefix.$filename;
-				if($wpdb->get_var("SELECT COUNT(*) FROM {$wpdb->prefix}sb_stuff WHERE name = '".mysql_real_escape_string($filename)."'") == 0) {
-					$filename = mysql_real_escape_string($filename);
+				if($wpdb->get_var("SELECT COUNT(*) FROM {$wpdb->prefix}sb_stuff WHERE name = '".esc_sql($filename)."'") == 0) {
+					$filename = esc_sql($filename);
 					if (move_uploaded_file($_FILES['upload']['tmp_name'], $dest)) {
 						$filename = $prefix.$filename;
 						$wpdb->query("INSERT INTO {$wpdb->prefix}sb_stuff VALUES (null, 'file', '{$filename}', 0, 0, 0)");
@@ -1360,9 +1360,9 @@ function sb_new_sermon() {
 		} else
 			$date = '1970-01-01 00:00';
 		if (function_exists('current_user_can') && !current_user_can('unfiltered_html')) {
-			$description = mysql_real_escape_string(wp_kses($_POST['description'], $allowedposttags));
+			$description = esc_sql(wp_kses($_POST['description'], $allowedposttags));
 		} else {
-			$description = mysql_real_escape_string($_POST['description']);
+			$description = esc_sql($_POST['description']);
 		}
 		// edit or not edit
 		if ( !isset($_GET['mid']) or !$_GET['mid'] ) { // new
@@ -1413,7 +1413,7 @@ function sb_new_sermon() {
 					$prefix = '';
 					$dest = SB_ABSPATH.sb_get_option('upload_dir').$prefix.$filename;
 					if ($wpdb->get_var("SELECT COUNT(*) FROM {$wpdb->prefix}sb_stuff WHERE name = '".esc_sql($filename)."'") == 0 && move_uploaded_file($_FILES['upload']['tmp_name'][$uid], $dest)) {
-						$filename = $prefix.mysql_real_escape_string($filename);
+						$filename = $prefix.esc_sql($filename);
 						$wpdb->query("INSERT INTO {$wpdb->prefix}sb_stuff VALUES (null, 'file', '".esc_sql($filename)."', $id, 0, 0)");
 					} else {
 						echo '<div id="message" class="updated fade"><p><b>'.$filename.__(' already exists.', $sermon_domain).'</b></div>';
@@ -1429,7 +1429,7 @@ function sb_new_sermon() {
 		// then URLs
 		foreach ((array) $_POST['url'] as $urlz) {
 			if (!empty($urlz)) {
-				$urlz = mysql_real_escape_string($urlz);
+				$urlz = esc_sql($urlz);
 				$wpdb->query("INSERT INTO {$wpdb->prefix}sb_stuff VALUES(null, 'url', '$urlz', $id, 0, 0);");
 			}
 		}
@@ -1444,7 +1444,7 @@ function sb_new_sermon() {
 		$tags = explode(',', $_POST['tags']);
 		$wpdb->query("DELETE FROM {$wpdb->prefix}sb_sermons_tags WHERE sermon_id = $id;");
 		foreach ($tags as $tag) {
-			$clean_tag = trim(mysql_real_escape_string($tag));
+			$clean_tag = trim(esc_sql($tag));
 			$existing_id = $wpdb->get_var("SELECT id FROM {$wpdb->prefix}sb_tags WHERE name='$clean_tag'");
 			if (is_null($existing_id)) {
 				$wpdb->query("INSERT  INTO {$wpdb->prefix}sb_tags VALUES (null, '$clean_tag')");
@@ -2230,14 +2230,14 @@ function sb_scan_dir() {
 	foreach ($files as $file) {
 		$bnn[] = $file->name;
 		if (!file_exists($dir.$file->name)) {
-			$wpdb->query("DELETE FROM {$wpdb->prefix}sb_stuff WHERE name='".mysql_real_escape_string($file->name)."' AND sermon_id=0;");
+			$wpdb->query("DELETE FROM {$wpdb->prefix}sb_stuff WHERE name='".esc_sql($file->name)."' AND sermon_id=0;");
 		}
 	}
 
 	if ($dh = @opendir($dir)) {
 		while (false !== ($file = readdir($dh))) {
 			if ($file != "." && $file != ".." && !is_dir($dir.$file) && !in_array($file, $bnn)) {
-				$file = mysql_real_escape_string($file);
+				$file = esc_sql($file);
 				$wpdb->query("INSERT INTO {$wpdb->prefix}sb_stuff VALUES (null, 'file', '{$file}', 0, 0, 0);");
 			   }
 		}

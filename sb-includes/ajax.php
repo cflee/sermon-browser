@@ -4,7 +4,7 @@ define ('SB_AJAX', true);
 
 // Throughout this plugin, p stands for preacher, s stands for service and ss stands for series
 if (isset($_POST['pname'])) { // preacher
-	$pname = mysql_real_escape_string($_POST['pname']);
+	$pname = esc_sql($_POST['pname']);
 	if (isset($_POST['pid'])) {
 		$pid = (int) $_POST['pid'];
 		if (isset($_POST['del'])) {
@@ -20,7 +20,7 @@ if (isset($_POST['pname'])) { // preacher
 		die();
 	}
 } elseif (isset($_POST['sname'])) { // service
-	$sname = mysql_real_escape_string($_POST['sname']);
+	$sname = esc_sql($_POST['sname']);
 	list($sname, $stime) = split('@', $sname);
 	$sname = trim($sname);
 	$stime = trim($stime);
@@ -44,7 +44,7 @@ if (isset($_POST['pname'])) { // preacher
 		die();
 	}
 } elseif (isset($_POST['ssname'])) { // series
-	$ssname = mysql_real_escape_string($_POST['ssname']);
+	$ssname = esc_sql($_POST['ssname']);
 	if (isset($_POST['ssid'])) {
 		$ssid = (int) $_POST['ssid'];
 		if (isset($_POST['del'])) {
@@ -60,10 +60,10 @@ if (isset($_POST['pname'])) { // preacher
 		die();
 	}
 } elseif (isset($_POST['fname'])) { // Files
-	$fname = mysql_real_escape_string($_POST['fname']);
+	$fname = esc_sql($_POST['fname']);
 	if (isset($_POST['fid'])) {
 		$fid = (int) $_POST['fid'];
-		$oname = isset($_POST['oname']) ? mysql_real_escape_string($_POST['oname']) : '';
+		$oname = isset($_POST['oname']) ? esc_sql($_POST['oname']) : '';
 		if (isset($_POST['del'])) {
 			if (!file_exists(SB_ABSPATH.sb_get_option('upload_dir').$fname) || unlink(SB_ABSPATH.sb_get_option('upload_dir').$fname)) {
 				$wpdb->query("DELETE FROM {$wpdb->prefix}sb_stuff WHERE id = {$fid};");
@@ -74,7 +74,7 @@ if (isset($_POST['pname'])) { // preacher
 				die();
 			}
 		} else {
-			$oname = mysql_real_escape_string($_POST['oname']);
+			$oname = esc_sql($_POST['oname']);
 			if (IS_MU) {
 				$file_allowed = FALSE;
 				global $wp_version;
@@ -110,7 +110,7 @@ if (isset($_POST['pname'])) { // preacher
 		wp_timezone_override_offset();
 	$st = (int) $_POST['fetch'] - 1;
 	if (!empty($_POST['title'])) {
-		$cond = "and m.title LIKE '%" . mysql_real_escape_string($_POST['title']) . "%' ";
+		$cond = "and m.title LIKE '%" . esc_sql($_POST['title']) . "%' ";
 	} else
 		$cond = '';
 	if ($_POST['preacher'] != 0) {
@@ -163,7 +163,7 @@ if (isset($_POST['pname'])) { // preacher
 		$st = (int) $_POST['fetchL'] - 1;
 		$abc = $wpdb->get_results("SELECT f.*, s.title FROM {$wpdb->prefix}sb_stuff AS f LEFT JOIN {$wpdb->prefix}sb_sermons AS s ON f.sermon_id = s.id WHERE f.sermon_id <> 0 AND f.type = 'file' ORDER BY f.name LIMIT {$st}, ".sb_get_option('sermons_per_page'));
 	} else {
-		$s = mysql_real_escape_string($_POST['search']);
+		$s = esc_sql($_POST['search']);
 		$abc = $wpdb->get_results("SELECT f.*, s.title FROM {$wpdb->prefix}sb_stuff AS f LEFT JOIN {$wpdb->prefix}sb_sermons AS s ON f.sermon_id = s.id WHERE f.name LIKE '%{$s}%' AND f.type = 'file' ORDER BY f.name;");
 	}
 ?>
