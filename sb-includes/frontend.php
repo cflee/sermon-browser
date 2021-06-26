@@ -1044,8 +1044,6 @@ function sb_print_filters($filter) {
 					    </div>
 					</div> <!--end .sermons-left-wrapper-->
 					<?php /* End ported from original by juvone/ripplewerkz */ ?>
-
-					<input type="hidden" name="page" value="1">
 				</div>
 			</form>
 		</div>
